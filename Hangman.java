@@ -70,6 +70,15 @@ public class Hangman {
     "     |\n" +
     " =========\n"};
 
+    static void printMissedGuesses(char arr[], int count){
+        if(arr!=null && count>0){
+            for(int i=0;i<count; i++){
+                System.out.print(arr[i]);
+            }
+        }
+        System.out.println();
+    }
+
     public static void main(String[] args) {
 
         Scanner scan= new Scanner(System.in);
@@ -81,22 +90,32 @@ public class Hangman {
         char prev=' ';
         int count=0;
         int chances=gallows.length;
-
+        char misses[]=new char[10];
+    
         while(count < chances){
         char guess=prev;
         System.out.println("Guess: " + guess);
         System.out.println(gallows[count]);
         System.out.println("Word: " + ans);
-        System.out.println("Misses: ");
+
+        System.out.print("Misses: ");
+        printMissedGuesses(misses, count);
+
         System.out.print("Guess: ");
         prev=scan.next().charAt(0);
         System.out.println("\n\n");
         if(word.contains(Character.toString(prev))){
             int charInd=word.indexOf(Character.toString(prev));
         } else{
-            count++;
+            misses[count++]=prev;
         } 
         
+    }
+
+    if(count==chances){
+        System.out.println("Tough Luck. Try Again!");
+        System.out.println("The word is " + word);
+
     }
     
     scan.close();
