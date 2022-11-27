@@ -1,6 +1,6 @@
 import java.lang.*;
 import java.util.Scanner;
-// import java.util.Arrays;
+import java.util.Arrays;
 
 public class Hangman {
 
@@ -79,24 +79,43 @@ public class Hangman {
         System.out.println();
     }
 
+    static void printPlaceholders(char arr[], int len ){
+        int count=0;
+        for(int i=0;i<len; i++){
+            System.out.print(arr[i] + " ");
+            if(arr[i]=='_') count++;
+        }
+        System.out.println('\n');
+        if(count==0){
+            System.out.println("GOOD WORK!");
+            System.exit(0);
+        }
+    }
+
     public static void main(String[] args) {
 
         Scanner scan= new Scanner(System.in);
 
         int ind=(int)(Math.floor(Math.random()*(words.length)));
         String word=words[ind];
-        System.out.println("Welcome to Java Hangman!\n");
-        String ans= "_ ".repeat(word.length());
+        System.out.println("\nWelcome to Java Hangman!\n");
+        char ans[]= new char[word.length()];
+        Arrays.fill(ans,'_');
         char prev=' ';
         int count=0;
         int chances=gallows.length;
-        char misses[]=new char[10];
+        char misses[]=new char[chances];
     
+        int temp=0; //Only to show the Guessed input after the first guess
         while(count < chances){
+
         char guess=prev;
-        System.out.println("Guess: " + guess);
+        if(temp!=0) System.out.println("Guess: " + guess);
+        temp++;
         System.out.println(gallows[count]);
-        System.out.println("Word: " + ans);
+
+        System.out.print("Word: ");
+        printPlaceholders(ans, word.length());
 
         System.out.print("Misses: ");
         printMissedGuesses(misses, count);
@@ -104,9 +123,15 @@ public class Hangman {
         System.out.print("Guess: ");
         prev=scan.next().charAt(0);
         System.out.println("\n\n");
-        if(word.contains(Character.toString(prev))){
+
+        if(word.contains(Character.toString(prev)))
+        {
             int charInd=word.indexOf(Character.toString(prev));
-        } else{
+            ans[charInd]=word.charAt(charInd);
+        } 
+
+        else
+        {
             misses[count++]=prev;
         } 
         
@@ -114,7 +139,7 @@ public class Hangman {
 
     if(count==chances){
         System.out.println("Tough Luck. Try Again!");
-        System.out.println("The word is " + word);
+        System.out.println("The word is " + "'" + word + "'");
 
     }
     
